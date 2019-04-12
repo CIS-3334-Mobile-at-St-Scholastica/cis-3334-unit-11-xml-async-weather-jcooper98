@@ -16,13 +16,28 @@ import java.util.Scanner;
 
 import static org.xmlpull.v1.XmlPullParser.TYPES;
 
+/**
+ * @author      Tom Gibbons
+ * @version     (current version number of program)
+ * @since       (the version of the package this class was first added to)
+ */
+
 public class AsyncDownloadXML extends AsyncTask<MainActivity, String, String> {
+
 
     MainActivity mainActivityLink;
 
-    //Implementation of AsyncTask used to download XML feed
-    // This method is run in a separate thread.  Do not do any UI stuff here.
-    // Calls onPostExecute when done and passes it the return value or String
+    /**
+     * Calls onPostExecute when done and passes it the return value or String
+     * <p>
+     *
+     * Implementation of AsyncTask used to download XML feed.  This method is run in a separate thread.  Do not do any UI stuff here.
+     * <p>
+     *
+     * @param  new_actWeather is the values passed to doInBackground that contains the weather information specified.
+     *
+     * @return will either return a string saying  "Successfully updated weather" OR one of three possible error messages.
+     */
     @Override
     protected String doInBackground(MainActivity... new_actWeather) {
         try {
@@ -34,7 +49,8 @@ public class AsyncDownloadXML extends AsyncTask<MainActivity, String, String> {
             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
             XmlPullParser xpp = factory.newPullParser();
 
-            String  weatherStrURL =  "http://api.openweathermap.org/data/2.5/weather?zip=55811,us&appid=5aa6c40803fbb300fe98c6728bdafce7&mode=xml&units=imperial";
+            String testLoc = null;
+            String  weatherStrURL =  "http://api.openweathermap.org/data/2.5/weather?zip=" + testLoc + ",us&appid=5aa6c40803fbb300fe98c6728bdafce7&mode=xml&units=imperial";
             URL weatherURL =  new URL(weatherStrURL);
             InputStream stream = weatherURL.openStream();
             xpp.setInput(stream, null);
@@ -85,6 +101,17 @@ public class AsyncDownloadXML extends AsyncTask<MainActivity, String, String> {
         }
     }
 
+
+
+    /**
+     * Used to display any form of progress in the user interface while the background computation is still executing.
+     * <p>
+     *
+     * Specifically this method is updating the temp and wind in the user interface.
+     * <p>
+     *
+     * @param  update is the values passed to onProgressUpdate to update the user interface.
+     */
     @Override
     protected void onProgressUpdate(String... update) {
         Log.v("== CIS 3334 ==","in onProgressUpdate");
@@ -92,6 +119,14 @@ public class AsyncDownloadXML extends AsyncTask<MainActivity, String, String> {
         mainActivityLink.setWind(update[1]);
     }
 
+
+
+    /**
+     * The background thread passes any information needed to this method as a parameter.
+     * <p>
+     *
+     * @param  result is the result passed to onPostExecute after the background computation is completed.
+     */
     @Override
     protected void onPostExecute(String result) {
         Log.v("== CIS 3334 ==", "in onPostExecute");
